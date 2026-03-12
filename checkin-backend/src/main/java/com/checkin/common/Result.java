@@ -45,6 +45,13 @@ public class Result<T> implements Serializable {
     }
 
     /**
+     * 成功响应（带消息，无数据）
+     */
+    public static <T> Result<T> success(String message) {
+        return new Result<>(200, message, null);
+    }
+
+    /**
      * 失败响应
      */
     public static <T> Result<T> error(String message) {

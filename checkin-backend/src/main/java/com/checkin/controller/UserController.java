@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/register")
     public Result<User> register(@RequestBody @Validated UserRegisterDTO dto) {
         User user = userService.register(dto);
-        return Result.success("注册成功", user);
+        return Result.success(user);
     }
 
     /**
@@ -48,7 +48,7 @@ public class UserController {
         data.put("token", token);
         data.put("user", user);
         
-        return Result.success("登录成功", data);
+        return Result.success(data);
     }
 
     /**
@@ -71,7 +71,7 @@ public class UserController {
         Long userId = jwtUtil.getUserId(token);
         user.setId(userId);
         userService.updateById(user);
-        return Result.success("更新成功", user);
+        return Result.success(user);
     }
 
     /**
@@ -94,7 +94,7 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(newPassword));
         userService.updateById(user);
         
-        return Result.success("密码修改成功");
+        return Result.success();
     }
 
     /**

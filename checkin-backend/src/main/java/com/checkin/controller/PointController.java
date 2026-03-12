@@ -61,7 +61,7 @@ public class PointController {
     @PostMapping
     public Result<CheckPoint> create(@RequestBody CheckPoint point) {
         checkPointService.save(point);
-        return Result.success("创建成功", point);
+        return Result.success(point);
     }
 
     /**
@@ -71,7 +71,7 @@ public class PointController {
     public Result<CheckPoint> update(@PathVariable Long id, @RequestBody CheckPoint point) {
         point.setId(id);
         checkPointService.updateById(point);
-        return Result.success("更新成功", point);
+        return Result.success(point);
     }
 
     /**
@@ -80,7 +80,7 @@ public class PointController {
     @DeleteMapping("/{id}")
     public Result<Void> delete(@PathVariable Long id) {
         checkPointService.removeById(id);
-        return Result.success("删除成功");
+        return Result.success();
     }
 
     /**
@@ -113,7 +113,7 @@ public class PointController {
         data.put("radius", radius);
         data.put("pointName", point.getName());
 
-        return Result.success(inRange ? "在打卡范围内" : "不在打卡范围内", data);
+        return Result.success(data);
     }
 
     /**

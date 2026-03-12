@@ -37,7 +37,7 @@ public class CheckinController {
         String token = getTokenFromRequest(request);
         Long userId = jwtUtil.getUserId(token);
         CheckRecord record = checkinService.workCheckin(userId, dto);
-        return Result.success("上班打卡成功", record);
+        return Result.success(record);
     }
 
     /**
@@ -49,7 +49,7 @@ public class CheckinController {
         String token = getTokenFromRequest(request);
         Long userId = jwtUtil.getUserId(token);
         CheckRecord record = checkinService.offCheckin(userId, dto);
-        return Result.success("下班打卡成功", record);
+        return Result.success(record);
     }
 
     /**
