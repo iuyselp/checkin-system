@@ -11,11 +11,31 @@ export default defineConfig({
     }
   },
   server: {
+    // 允许外部访问
+    host: '0.0.0.0',
     port: 5173,
+    strictPort: false,
+    // 配置 CORS
+    cors: true,
+    // 代理配置
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
-        changeOrigin: true
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
+  // 生产环境配置
+  build: {
+    outDir: 'dist',
+    assetsDir: 'static',
+    sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
       }
     }
   }
