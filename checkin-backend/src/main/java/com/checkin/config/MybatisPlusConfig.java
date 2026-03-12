@@ -31,8 +31,12 @@ public class MybatisPlusConfig implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
-        this.strictInsertFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
+        if (metaObject.hasSetter("createTime")) {
+            this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
+        }
+        if (metaObject.hasSetter("updateTime")) {
+            this.strictInsertFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
+        }
     }
 
     /**
@@ -40,6 +44,8 @@ public class MybatisPlusConfig implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
+        if (metaObject.hasSetter("updateTime")) {
+            this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
+        }
     }
 }
