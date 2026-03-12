@@ -7,10 +7,11 @@ import com.checkin.entity.User;
 import com.checkin.service.UserService;
 import com.checkin.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class UserController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
      * 用户注册
@@ -83,9 +85,13 @@ public class UserController {
         Long userId = jwtUtil.getUserId(token);
         User user = userService.getById(userId);
         
-        // TODO: 验证旧密码
+        // 验证旧密码
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return Result.error("原密码错误");
+        }
         
-        user.setPassword(newPassword); // TODO: 加密
+        // 加密新密码并更新
+        user.setPassword(passwordEncoder.encode(newPassword));
         userService.updateById(user);
         
         return Result.success("密码修改成功");
