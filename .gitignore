@@ -1,0 +1,34 @@
+# Maven
+target/
+*.log
+.mvn/
+
+# Node
+node_modules/
+dist/
+.npm
+*.local
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# 配置文件（包含敏感信息）
+application-local.yml
+application-prod.yml
+.env
+.env.local
+.env.*.local
+
+# 日志
+logs/
+*.log
+
+# 临时文件
+tmp/
+temp/
+.cache/

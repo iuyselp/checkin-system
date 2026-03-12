@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: checkin-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: checkin
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../checkin-backend/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: always
+    networks:
+      - checkin-network
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: checkin-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+    networks:
+      - checkin-network
+
+  # 后端服务
+  backend:
+    build:
+      context: ../checkin-backend
+      dockerfile: Dockerfile
+    container_name: checkin-backend
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/checkin?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      TZ: Asia/Shanghai
+    restart: always
+    networks:
+      - checkin-network
+
+  # 前端服务
+  frontend:
+    build:
+      context: ../checkin-frontend
+      dockerfile: Dockerfile
+    container_name: checkin-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    restart: always
+    networks:
+      - checkin-network
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  checkin-network:
+    driver: bridge
