@@ -31,21 +31,21 @@ export interface TodayStatus {
  * 上班打卡
  */
 export function workCheckin(data: CheckinParams) {
-  return post<CheckRecord>('/checkin/work', data)
+  return post<CheckRecord>('checkin/work', data)
 }
 
 /**
  * 下班打卡
  */
 export function offCheckin(data: CheckinParams) {
-  return post<CheckRecord>('/checkin/off', data)
+  return post<CheckRecord>('checkin/off', data)
 }
 
 /**
  * 获取今日打卡状态
  */
 export function getTodayStatus() {
-  return get<TodayStatus>('/checkin/today/status')
+  return get<TodayStatus>('checkin/today/status')
 }
 
 /**
@@ -57,5 +57,5 @@ export function getRecords(params: {
   page?: number
   size?: number
 }) {
-  return get('/checkin/records', params)
+  return get('checkin/records', params)
 }
